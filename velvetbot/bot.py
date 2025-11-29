@@ -182,11 +182,20 @@ async def fresh_sync(ctx):
         bot.tree.clear_commands(guild=None)
         await bot.tree.sync()
         
-        # Re-copy all commands to tree
-        for cog_name, cog in bot.cogs.items():
-            for cmd in cog.get_app_commands():
-                bot.tree.add_command(cmd)
-        
+        # Reload all cogs to re-register commands
+        cogs = [
+            "velvetbot.cogs.moderation",
+            "velvetbot.cogs.engagement",
+            "velvetbot.cogs.streaming",
+            "velvetbot.cogs.clients",
+            "velvetbot.cogs.analytics",
+            "velvetbot.cogs.custom_commands"
+        ]
+        for cog in cogs:
+            try:
+                await bot.reload_extension(cog)
+            except Exception as e:
+                logger.error(f"Failed to reload {cog}: {e}")
         # Sync globally
         synced = await bot.tree.sync()
         
