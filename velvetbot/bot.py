@@ -12,11 +12,11 @@ from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 
+
+# Load environment variables FIRST - before importing Config
+load_dotenv()
 from .config import Config
 from .database import Database
-
-# Load environment variables
-load_dotenv()
 
 # Configure logging
 logging.basicConfig(
